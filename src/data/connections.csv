@@ -1,0 +1,49 @@
+name_origin,name_destination,team_info
+Marta,Evgenii,News UK
+Marta,Alison,News UK
+Marta,James,News UK
+Alison,Marta,News UK
+Alison,Evgenii,News UK
+Alison,James,News UK
+Evgenii,Marta,News UK
+Evgenii,James,News UK
+Evgenii,Alison,News UK
+James,Alison,News UK
+James,Marta,News UK
+James,Evgenii,News UK
+Alfonso,Silvestro,Fitbug
+Alfonso,Stefano,Fitbug
+Alfonso,Patrick,Fitbug
+Stefano,Alfonso,Fitbug
+Stefano,Silvestro,Fitbug
+Stefano,Patrick,Fitbug
+Silvestro,Patrick,Fitbug
+Silvestro,Stefano,Fitbug
+Silvestro,Alfonso,Fitbug
+Patrick,Stefano,Fitbug
+Patrick,Alfonso,Fitbug
+Patrick,Silvestro,Fitbug
+Aileen,Laura,Sopra Steria
+Aileen,Julien,Sopra Steria
+Aileen,Ahmed,Sopra Steria
+Julien,Laura,Sopra Steria
+Julien,Ahmed,Sopra Steria
+Julien,Aileen,Sopra Steria
+Laura,Aileen,Sopra Steria
+Laura,Julien,Sopra Steria
+Laura,Ahmed,Sopra Steria
+Ahmed,Julien,Sopra Steria
+Ahmed,Laura,Sopra Steria
+Ahmed,Aileen,Sopra Steria
+Ifeanyi,Luis,Parkinson
+Ifeanyi,Francesco,Parkinson
+Ifeanyi,Helene,Parkinson
+Luis,Ifeanyi,Parkinson
+Luis,Francesco,Parkinson
+Luis,Helene,Parkinson
+Helene,Ifeanyi,Parkinson
+Helene,Francesco,Parkinson
+Helene,Luis,Parkinson
+Francesco,Ifeanyi,Parkinson
+Francesco,Helene,Parkinson
+Francesco,Luis,Parkinson

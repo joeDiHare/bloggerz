@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<h1>S2DS Course October 2016</h1>
+<p><i>project s2ds-d3.js</i></p>
+<style>
+
+.land {
+fill: #17a6ec;
+  /*fill: #ddd;*/
+}
+
+.state-borders {
+  fill: none;
+  stroke: #fff;
+}
+
+.contact-arc {
+  fill: none;
+}
+
+.contact:hover .contact-arc {
+  stroke: #330000;
+}
+
+.contact-cell {
+  fill: none;
+  stroke: #000;
+  stroke-opacity: 0.1;
+  pointer-events: all;
+}
+
+</style>
+<svg width="1300" height="800"></svg>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://d3js.org/d3-geo.v1.min.js"></script>
+<script src="https://d3js.org/d3-geo-projection.v1.min.js"></script>
+<script src="https://d3js.org/topojson.v1.min.js"></script>
+<script>
+
+var svg = d3.select("svg"),
+    width = +svg.attr("width"),
+    height = +svg.attr("height");
+
+var projection = d3.geoEquirectangular()//geoEckert3()
+    .translate([width / 2, height / 2])
+    .scale(280);
+
+var radius = d3.scaleSqrt()
+    .domain([0, 100])
+    .range([0, 14]);
+
+var path = d3.geoPath()
+    .projection(projection)
+    .pointRadius(4.5);
+
+var voronoi = d3.voronoi()
+    .extent([[-1, -1], [width + 1, height + 1]]);
+
+d3.queue()
+    .defer(d3.json, "src/data/world-110m2.json")
+    .defer(d3.csv,  "src/data/team_members.csv", typeContact)
+    .defer(d3.csv,  "src/data/connections.csv",  typeConnection)
+    .await(ready);
+
+function ready(error, world, team_members, connections) {
+  if (error) throw error;
+
+  var contactByName = d3.map(team_members, function(d) { return d.name_contact; });
+
+  connections.forEach(function(conn) {
+    var source = contactByName.get(conn.name_origin),
+        target = contactByName.get(conn.name_destination);
+    source.arcs.coordinates.push([source, target]);
+    target.arcs.coordinates.push([target, source]);
+  });
+
+  team_members = team_members
+      .filter(function(d) { return d.arcs.coordinates.length; });
+
+  svg.append("path")
+      .datum(topojson.feature(world, world.objects.land))
+      .attr("class", "land")
+      .attr("d", path);
+
+  svg.append("path")
+      .datum(topojson.mesh(world, world.objects.countries, function(a, b) { return a !== b; }))
+      .attr("class", "state-borders")
+      .attr("d", path);
+
+  svg.append("path")
+      .datum({type: "MultiPoint", coordinates: team_members})
+      .attr("class", "contact-dots")
+      .attr("d", path);
+
+  var contact = svg.selectAll(".contact")
+    .data(team_members)
+    .enter().append("g")
+      .attr("class", "contact");
+
+  contact.append("title")
+      .text(function(d) { return d.name +
+        "\nTeam: " + d.team +
+        "\n" + d.arcs.coordinates.length + " connections" +
+        "\n" + d.email; });
+
+  contact.append("path")
+      .attr("class", "contact-arc")
+      .attr("d", function(d) { return path(d.arcs); });
+
+  contact.append("path")
+      .data(voronoi.polygons(team_members.map(projection)))
+      .attr("class", "contact-cell")
+      .attr("d", function(d) { return d ? "M" + d.join("L") + "Z" : null; });
+
+  var widthImg = 50; var heightImg= 50; // icon image size
+  contact.append("png:image")
+       .attr('x', function(d) { return projection([d.longitude,d.latitude])[0]-widthImg/2; })
+       .attr('y', function(d) { return projection([d.longitude,d.latitude])[1]-heightImg/2; })
+       .attr('width',  widthImg)
+       .attr('height', heightImg)
+       .on("mouseover", function(){
+            d3.select(this)
+                .attr("xlink:href",function(d) { return "src/images/"+d.name_contact + ".png";})
+                .style('opacity', 1);
+       })
+       .on("mouseout", function(){
+            d3.select(this)
+            .style('opacity', 0);
+       });
+}
+
+function typeContact(d) {
+  d[0] = +d.longitude;
+  d[1] = +d.latitude;
+  d.arcs = {type: "MultiLineString", coordinates: []};
+  return d;
+}
+
+function typeConnection(d) {
+  d.team_info = +d.team_info
+  return d;
+}
+
+</script>
