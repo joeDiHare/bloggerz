@@ -70,8 +70,6 @@ function ready(error, world, team_members, connections) {
   connections.forEach(function(conn) {
     var source = contactByName.get(conn.name_origin),
         target = contactByName.get(conn.name_destination);
-        console.log(source);
-        console.log(target);
     source.arcs.coordinates.push([source, target]);
     target.arcs.coordinates.push([target, source]);
   });
@@ -102,8 +100,7 @@ function ready(error, world, team_members, connections) {
   contact.append("title")
       .text(function(d) { return d.name +
         "\nTeam: " + d.team +
-        "\n" + d.arcs.coordinates.length + " connections" +
-        "\n" + d.email; });
+        "\n" + d.arcs.coordinates.length + " connections"; });
 
   contact.append("path")
       .attr("class", "contact-arc")
@@ -114,7 +111,7 @@ function ready(error, world, team_members, connections) {
       .attr("class", "contact-cell")
       .attr("d", function(d) { return d ? "M" + d.join("L") + "Z" : null; });
 
-  var widthImg = 50; var heightImg= 50; // icon image size
+  var widthImg = 50; var heightImg= 50; // image size
   contact.append("png:image")
        .attr('x', function(d) { return projection([d.longitude,d.latitude])[0]-widthImg/2; })
        .attr('y', function(d) { return projection([d.longitude,d.latitude])[1]-heightImg/2; })
@@ -139,28 +136,9 @@ function typeContact(d) {
 }
 
 function typeConnection(d) {
+  // d.count = +d.count;
   d.team_info = +d.team_info
   return d;
 }
 
-</script>
-<input type="file" id="files" name="files[]" multiple />
-<output id="list"></output>
-
-<script>
-  function handleFileSelect(evt) {
-    var files = evt.target.files; // FileList object
-
-    // files is a FileList of File objects. List some properties.
-    var output = [];
-    for (var i = 0, f; f = files[i]; i++) {
-      output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
-                  f.size, ' bytes, last modified: ',
-                  f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
-                  '</li>');
-    }
-    document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
-  }
-
-  document.getElementById('files').addEventListener('change', handleFileSelect, false);
 </script>
