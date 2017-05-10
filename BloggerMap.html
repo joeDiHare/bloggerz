@@ -100,12 +100,14 @@ function ready(error, world, team_members, connections) {
       .attr("class", "contact");
 
   contact.append("title")
-      .text(function(d) { return d.name +
-        "\nConnection:\n" + d.connection_info +
-        "\n\nSummary: " + d.summary +
-        "\n\n" + d.email +
-        "\n\n" + d.linkedin +
-        "\n\n" + d.github; });
+      .text(function(d) { return ""+
+      	"\n" + d.name +        
+        "\n\nSummary: " + wordWrap(d.summary) +
+        "\n\nEmail:" + d.email +
+        "\nLinIn:" + d.linkedin +
+        "\nGitHb:" + d.github +
+        "\n\nConnection:\n" + d.connection_info +
+        "\n\nCurrent location:\n" + d.city+", "+d.country; });
 
   contact.append("path")
       .attr("class", "contact-arc")
@@ -143,6 +145,19 @@ function typeContact(d) {
 function typeConnection(d) {
   d.connection_info = +d.connection_info
   return d;
+}
+
+function wordWrap(str) {
+    var L = 49;
+    var arr=[],r = /(^.{49}\s|^.{48}\s\w)/
+    while(str.length>0){
+      if(str.length>=L&&!r.test(str)){
+        str = str.slice(0,L-1) +'-'+ str.slice(L-1)
+      }
+      arr.push(str.slice(0,L))
+      str = str.slice(L)
+    }
+    return arr.join('\n')
 }
 
 </script>
