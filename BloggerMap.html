@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<h1>S2DS Course October 2016</h1>
-<p><i>project s2ds-d3.js</i></p>
+<h1>Blogging project 2017</h1>
+<p><i>The group </i></p>
 <style>
 
 .land {
@@ -101,9 +101,11 @@ function ready(error, world, team_members, connections) {
 
   contact.append("title")
       .text(function(d) { return d.name +
-        "\nConnection:\n" + d.team +
-        "\n\nSummary: " + d.arcs.coordinates +
-        "\n\n" + d.email; });
+        "\nConnection:\n" + d.connection_info +
+        "\n\nSummary: " + d.summary +
+        "\n\n" + d.email +
+        "\n\n" + d.linkedin +
+        "\n\n" + d.github; });
 
   contact.append("path")
       .attr("class", "contact-arc")
@@ -139,7 +141,7 @@ function typeContact(d) {
 }
 
 function typeConnection(d) {
-  d.team_info = +d.team_info
+  d.connection_info = +d.connection_info
   return d;
 }
 

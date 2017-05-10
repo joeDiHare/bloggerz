@@ -1,6 +1,6 @@
-name_contact,name,team,city,country,latitude,longitude,email
-Stefano,Stefano Cosentino,Pivigo London,Washington,USA,38.897615,-77.036563,stefano286@gmail.com
-Helene,Helene Draux,Pivigo London,London,UK,51.521168,0.114672,@gmail.com
-Greg,Greg MacLennan,General Assembly,Boston,USA,41.366137,-71.055786,@gmail.com
-James,James Wedell,General Assembly,Boston,USA,43.366137,-71.055786,@gmail.com
-Amir,Amir Feizpour,Pivigo USA,Toronto,CANADA,43.66354,-79.37738,@gmail
+name_contact,name,city,country,latitude,longitude,email,github,linkedin,summary
+Stefano,Stefano Cosentino,Washington,USA,38.897615,-77.036563,stefano286@gmail.com,a,a,a
+Helene,Helene Draux,London,UK,51.521168,0.114672,@gmail.com,a,a,a
+Greg,Greg MacLennan,Boston,USA,41.366137,-71.055786,@gmail.com,a,a,a
+James,James Wedell,Boston,USA,43.366137,-71.055786,@gmail.com,a,a,a
+Amir,Amir Feizpour,Toronto,CANADA,43.66354,-79.37738,@gmail,a,a,a
