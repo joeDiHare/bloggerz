@@ -1,40 +1,83 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<h1>Blogging project 2017</h1>
-<p><i>The group </i></p>
-<style>
+<h1 style="float:right; color:white; font-size:250%">Blogging project 17</h1>
 
+<div id="info"></div>
+<div>
+<select id='sel'>
+	<option selected>Team member</option>
+	<option>Stefano</option>
+	<option>Helene</option>
+	<option>Greg</option>
+	<option>James</option>
+	<option>Amir</option>
+	<option>Ashish</option>
+</select>
+</div>
+<svg width="1300" height="800"></svg>
+
+
+<style>
 .land {
 fill: #17a6ec;
   /*fill: #ddd;*/
 }
-
 .state-borders {
   fill: none;
   stroke: #fff;
 }
-
 .contact-arc {
   fill: none;
 }
-
 .contact:hover .contact-arc {
   stroke: #330000;
 }
-
 .contact-cell {
   fill: none;
   stroke: #000;
   stroke-opacity: 0.1;
   pointer-events: all;
 }
-
+#sel {
+    font-size:120%;
+    text-align: center;
+    position:fixed;
+    top: 38%;
+    left: 45%;
+    width:10%;
+    height:2em;    
+    border-radius:25px;
+    margin-left: -10em;
+}
+#info {
+	text-align: center;
+	font-size:120%;
+    position:fixed;
+    top: 55%;
+    left: 35%;
+    width:30%;
+    height:20%;
+    margin-top: -9em; /*set to a negative number 1/2 of your height*/
+    margin-left: -10em; /*set to a negative number 1/2 of your width*/
+    border: 1px solid #ccc;
+    background-color: rgba(255, 255, 255, .3);
+    border-radius:25px;
+}
+svg {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    top: 0;
+    z-index: -1;    
+}
 </style>
-<svg width="1300" height="800"></svg>
+
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="https://d3js.org/d3-geo.v1.min.js"></script>
 <script src="https://d3js.org/d3-geo-projection.v1.min.js"></script>
 <script src="https://d3js.org/topojson.v1.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+
 <script>
 
 var svg = d3.select("svg"),
@@ -65,13 +108,11 @@ d3.queue()
 function ready(error, world, team_members, connections) {
   if (error) throw error;
 
-  var contactByName = d3.map(team_members, function(d) { return d.name_contact; });
+  contactByName = d3.map(team_members, function(d) { return d.name_contact; });
 
   connections.forEach(function(conn) {
     var source = contactByName.get(conn.name_origin),
         target = contactByName.get(conn.name_destination);
-        console.log(source);
-        console.log(target);
     source.arcs.coordinates.push([source, target]);
     target.arcs.coordinates.push([target, source]);
   });
@@ -94,20 +135,17 @@ function ready(error, world, team_members, connections) {
       .attr("class", "contact-dots")
       .attr("d", path);
 
-  var contact = svg.selectAll(".contact")
+  contact = svg.selectAll(".contact")
     .data(team_members)
     .enter().append("g")
       .attr("class", "contact");
 
   contact.append("title")
       .text(function(d) { return ""+
-      	"\n" + d.name +        
-        "\n\nSummary: " + wordWrap(d.summary) +
-        "\n\nEmail:" + d.email +
-        "\nLinIn:" + d.linkedin +
-        "\nGitHb:" + d.github +
-        "\n\nConnection:\n" + d.connection_info +
+      	"\n" + d.name +                       
         "\n\nCurrent location:\n" + d.city+", "+d.country; });
+      // <a href="https://www.w3schools.com">Visit W3Schools.com!</a>
+
 
   contact.append("path")
       .attr("class", "contact-arc")
@@ -135,6 +173,20 @@ function ready(error, world, team_members, connections) {
        });
 }
 
+var options = document.getElementById('sel').options;
+$("select#sel").change(function(){
+	var selected = $("#sel option:selected").val();
+	var d = contactByName.get(selected);
+	$("#info").html(
+		"</br>"+        
+		"<p>"+wordWrap(d.summary)+"</p>"+		
+        "<p><a href='"+d.email+    "'>"+d.email+"</a>"+
+        "&nbsp;&nbsp;   <a href='"+d.linkedin +"'>linkedIn</a>"+
+        "&nbsp;&nbsp;   <a href='"+ d.github  +"'>GitHub</a></p>"+
+        "<p> Current location: "+ d.city+", "+d.country+ "</p>");
+});
+
+
 function typeContact(d) {
   d[0] = +d.longitude;
   d[1] = +d.latitude;
@@ -148,6 +200,11 @@ function typeConnection(d) {
 }
 
 function wordWrap(str) {
+    return str;
+    if (str===undefined){
+    	return '';
+    }
+
     var L = 49;
     var arr=[],r = /(^.{49}\s|^.{48}\s\w)/
     while(str.length>0){
